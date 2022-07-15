@@ -9,7 +9,6 @@ use std::ops::Deref;
 use core::option;
 use csrf::{AesGcmCsrfProtection, CsrfProtection};
 use data_encoding::BASE64;
-use std::time::Duration;
 
 #[macro_use] 
 extern crate rocket;

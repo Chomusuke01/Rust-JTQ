@@ -1328,7 +1328,6 @@ dependencies = [
  "rocket_cors",
  "serde",
  "serde_json",
- "time 0.1.44",
 ]
 
 [[package]]
