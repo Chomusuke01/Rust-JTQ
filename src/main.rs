@@ -10,6 +10,7 @@ use core::option;
 use csrf::{AesGcmCsrfProtection, CsrfProtection};
 use data_encoding::BASE64;
 
+
 #[macro_use] 
 extern crate rocket;
 extern crate rocket_cors;
@@ -96,14 +97,14 @@ fn add_visitor(visitor: Json<VisitorDTO>, visitor_state: &State<VisitorMap>, vis
         id: vid,
         name: visitor.0.name,
         username: visitor.0.username,
-        password: visitor.0.password,
+        password: bcrypt::hash(visitor.0.password,8).unwrap(),
         phone_number: visitor.0.phone_number,
         accepted_terms: visitor.0.accepted_terms,
         accepted_comercial: visitor.0.accepted_comercial,
         user_type: visitor.0.user_type,
     };
 
-    let mut visitors = executor::block_on(visitor_state.write());
+    let mut visitors = executor::block_on(visitor_state.write());  
     let check = visitors.insert(new_visitor.clone().username, new_visitor.clone());
 
     match check{
@@ -121,11 +122,12 @@ fn login (visitor: Json<VisitorLoginDTO>, visitor_state: &State<VisitorMap>) -> 
     
     visitors.get(&visitor.0.username)
     .map(|v |v.clone())
-    .filter(|v | visitor.password.eq(&v.password))
+    .filter(|v | bcrypt::verify(&visitor.password, &v.password).unwrap())
     .map(|vis | Json(vis.clone()))
 
 }
 
+//visitor.password.eq(&v.password)
 #[get("/csrf/v1/token")]
 fn get_auth_token() -> Json<TokenDTO>{
     let protect = AesGcmCsrfProtection::from_key(*b"01234567012345670123456701234567");
