@@ -10,6 +10,8 @@ rocket = { version = "0.5.0-rc.1", features = [ "json" ] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 futures = "0.3.4"
+diesel = { version = "1.4.8", features = ["r2d2", "time", "numeric","num-integer", "chrono", "postgres"] }
+diesel-derive-enum = {version = "1.1.2", features=["postgres"]}
 rocket_cors = { git = "https://github.com/lawliet89/rocket_cors", branch = "master" }
 csrf = "0.3.0"
 data-encoding = "2.1.1"
